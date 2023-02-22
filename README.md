@@ -16,7 +16,7 @@ Probably not the best way to do it, but hey, **it works!**
 # Keyboard Shorcuts	
 There is some shortcut to know before using this app
 
-	RightAlt + LeftArrow 	=> 	Moves the crossair left
+	RightAlt + LeftArrow 		=> 	Moves the crossair left
 	RightAlt + UpArrow 		=> 	Moves the crossair up
 	RightAlt + RightArrow 		=> 	Moves the crossair right
 	RightAlt + DownArrow 		=> 	Moves the crossair down
@@ -43,7 +43,7 @@ An example with csgo is available in the config.json file
 
 # Installation
 
-* Download the prebuilt version from the [realease tab](#)
+* Download the prebuilt version from the [realease tab](https://github.com/Unimat45/Crosshair/releases)
 
 Or
 
