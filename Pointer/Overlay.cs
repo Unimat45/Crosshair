@@ -6,8 +6,9 @@
         private Graphics? g;
         private readonly Pen pen;
         private readonly Pen penBlack;
-        private readonly Config defaultCfg;
         private readonly Label lblLoaded;
+        private readonly Config defaultCfg;
+        private bool isHidden = false;
 
         private float offsetX = 0f;
         private float offsetY = 0f;
@@ -16,6 +17,23 @@
             InitializeComponent();
             pen = new(Color.White, .5f);
             penBlack = new(Color.Black, .5f);
+
+            NotifyIcon icon = new() {
+                Text = "Pointer",
+                Visible = true,
+                Icon = new Icon("generic.ico")
+            };
+
+            ContextMenuStrip strip = new();
+             
+            ToolStripMenuItem item = new() {
+                Text = "E&xit"
+            };
+            item.Click += new EventHandler(this.CloseOnExit);
+
+            strip.Items.Add(item);
+
+            icon.ContextMenuStrip = strip;
 
             this.PositionWindow();
             Config.LoadFromFile(this.Width, this.Height);
@@ -35,14 +53,35 @@
             new Task(() => {
                 while (true) {
                     bool isUpOn     =   Externs.IsKeyDown(VK.UP);
+                    bool isPDown    =   Externs.IsKeyDown(VK.KEY_P);
+                    bool isQDown    =   Externs.IsKeyDown(VK.KEY_Q);
                     bool isDownOn   =   Externs.IsKeyDown(VK.DOWN);
                     bool isLeftOn   =   Externs.IsKeyDown(VK.LEFT);
                     bool isRightOn  =   Externs.IsKeyDown(VK.RIGHT);
 
+                    bool isShiftOn  =   Externs.IsKeyDown(VK.LSHIFT);
+                    bool isCtrlOn   =   Externs.IsKeyDown(VK.CONTROL);
                     bool isAltOn    =   Externs.IsKeyDown(VK.RMENU);
+                    bool isLeftAltOn=   Externs.IsKeyDown(VK.LMENU);
                     bool isHomeOn   =   Externs.IsKeyDown(VK.HOME);
 
+                    if (isLeftAltOn && isShiftOn && isCtrlOn && isQDown) {
+                        this.SafeExec(form => form.Close());
+                    }
+
                     if (isAltOn) {
+
+                        if (isCtrlOn && isPDown) {
+                            if (isHidden) {
+                                this.SafeExec(form => Show());
+                            }
+                            else {
+                                this.SafeExec(form => form.Hide());
+                            }
+                            this.isHidden = !this.isHidden;
+                            Thread.Sleep(100);
+                        }
+
                         if (isHomeOn) {
                             offsetX = 0f;
                             offsetY = 0f;
@@ -56,6 +95,10 @@
                     Thread.Sleep(REFRESH_RATE);
                 }
             }).Start();
+        }
+
+        private void CloseOnExit(object sender, EventArgs args) {
+            this.Close();
         }
 
         private void Overlay_Load(object sender, EventArgs e) {
