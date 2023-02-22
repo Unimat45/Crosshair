@@ -22,7 +22,7 @@ There is some shortcut to know before using this app
 	RightAlt + DownArrow 		=> 	Moves the crossair down
 	RightAlt + Home			=> 	Brings the crossair back in the center
 
-	Ctrl + RightAlt + P     		=> 	Toggles the crossair
+	Ctrl + RightAlt + P     	=> 	Toggles the crossair
 	Ctrl + LeftAlt + LeftShift + Q 	=>	Exits the application
 
 # Configuration
