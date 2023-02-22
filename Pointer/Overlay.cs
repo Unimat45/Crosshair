@@ -1,9 +1,13 @@
 ﻿namespace Pointer {
     using VK = Externs.VK;
     public partial class Overlay : Form {
+        private const int REFRESH_RATE = 50;
+
         private Graphics? g;
         private readonly Pen pen;
         private readonly Pen penBlack;
+        private readonly Config defaultCfg;
+        private readonly Label lblLoaded;
 
         private float offsetX = 0f;
         private float offsetY = 0f;
@@ -12,6 +16,19 @@
             InitializeComponent();
             pen = new(Color.White, .5f);
             penBlack = new(Color.Black, .5f);
+
+            this.PositionWindow();
+            Config.LoadFromFile(this.Width, this.Height);
+            defaultCfg = new Config(this.Width, this.Height, "None", "%w / 2", "%h / 2");
+
+            lblLoaded = new() {
+                Left = Width - 150,
+                Top = 50,
+                Font = new Font("Calibri", 16),
+                ForeColor = Color.White,
+            };
+
+            this.Controls.Add(lblLoaded);
 
             this.ShowInTaskbar = false;
 
@@ -26,7 +43,6 @@
                     bool isHomeOn   =   Externs.IsKeyDown(VK.HOME);
 
                     if (isAltOn) {
-
                         if (isHomeOn) {
                             offsetX = 0f;
                             offsetY = 0f;
@@ -37,8 +53,7 @@
                         if (isUpOn)     { offsetY--; }
                         if (isDownOn)   { offsetY++; }
                     }
-
-                    Thread.Sleep(50);
+                    Thread.Sleep(REFRESH_RATE);
                 }
             }).Start();
         }
@@ -63,7 +78,7 @@
                 this.PositionWindow();
                 this.SafeExec(form => form.Refresh());
 
-                Thread.Sleep(50); // Refresh rate => 50ms
+                Thread.Sleep(REFRESH_RATE); // Refresh rate => 50ms
             }
         }
 
@@ -86,23 +101,22 @@
 
         private void Overlay_Paint(object sender, PaintEventArgs e) {
             g = e.Graphics;
+            float multi = 5f;
+            Config cfg = Config.ActiveConfig ?? defaultCfg;
 
-            float width = this.Width / 2 + offsetX;
-            float height = this.Height / 2 + offsetY;
+            // WHITE
+            float width = cfg.CalculateWidthRule() + offsetX;
+            float height = cfg.CalculateHeightRule() + offsetY;
 
-            float multi = Form1.ballSize;
-            // UP DOWN
             g.DrawLine(pen, width - multi, height, width + multi, height);
-
             g.DrawLine(pen, width, height - multi, width, height + multi);
 
 
-            float widthBlack = this.Width / 2 + 1 + offsetX;
-            float heightBlack = this.Height / 2 + 1 + offsetY;
-
             // BLACK
-            g.DrawLine(penBlack, widthBlack - multi, heightBlack, widthBlack + multi, heightBlack);
+            float widthBlack = cfg.CalculateWidthRule() + 1 + offsetX;
+            float heightBlack = cfg.CalculateHeightRule() + 1 + offsetY;
 
+            g.DrawLine(penBlack, widthBlack - multi, heightBlack, widthBlack + multi, heightBlack);
             g.DrawLine(penBlack, widthBlack, heightBlack - multi, widthBlack, heightBlack + multi);
         }
     }

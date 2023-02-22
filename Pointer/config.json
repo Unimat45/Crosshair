@@ -1,0 +1,9 @@
+[
+  {
+    "ProcessName": "csgo",
+    "WidthRule": "(%w / 2) - 2",
+    "HeightRule": "(%h * 2 / 3) - 99",
+    "X": -1,
+    "Y": -1
+  }
+]
