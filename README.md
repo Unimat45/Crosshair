@@ -18,8 +18,8 @@ There is some shortcut to know before using this app
 
 	RightAlt + LeftArrow 	=> 	Moves the crossair left
 	RightAlt + UpArrow 		=> 	Moves the crossair up
-	RightAlt + RightArrow 	=> 	Moves the crossair right
-	RightAlt + DownArrow 	=> 	Moves the crossair down
+	RightAlt + RightArrow 		=> 	Moves the crossair right
+	RightAlt + DownArrow 		=> 	Moves the crossair down
 	RightAlt + Home			=> 	Brings the crossair back in the center
 
 	Ctrl + RightAlt + P     		=> 	Toggles the crossair
@@ -31,10 +31,10 @@ The file of an array of objects with the following properties
 
 	{
 		"ProcessName": 	string,			// Name of the process without the '.exe'
-		"WidthRule": 	string | null,	// Rule (%w => width) of the position in X of the crosshair
-		"HeightRule": 	string | null,	// Rule (%h => height) of the position in Y of the crosshair
-		"X":			number, 		// Exact position in X of the crosshair
-		"Y":			number			// Exact position in Y of the crosshair
+		"WidthRule": 	string | null,		// Rule (%w => width) of the position in X of the crosshair
+		"HeightRule": 	string | null,		// Rule (%h => height) of the position in Y of the crosshair
+		"X":			number, 	// Exact position in X of the crosshair
+		"Y":			number		// Exact position in Y of the crosshair
 	}
 
 **If X and Y are unset or set to a value >= 0, `WidthRule` and `HeightRule` are ignored** 
