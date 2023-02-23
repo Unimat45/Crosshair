@@ -55,5 +55,6 @@ Or
 # TODO
 
 1. Fix system tray icon context menu, currently lagging for some reasons
-2. Create a better/easier configuration interface
+2. Create an auto updater
+3. Create a better/easier configuration interface
 4. Other general fixes
