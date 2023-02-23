@@ -158,7 +158,6 @@
                     if (ps.Length == 0) {
                         // If not, unload the config
                         _activeConfig = null;
-                        break;
                     }
                 }
                 // Sleeps for 1 sec

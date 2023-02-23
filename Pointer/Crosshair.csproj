@@ -6,10 +6,15 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>generic.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="generic.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="generic.ico" />
   </ItemGroup>
 
   <ItemGroup>
