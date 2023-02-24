@@ -31,7 +31,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Name = "Overlay";
-            this.Text = "Overlay";
+            this.Text = "Crosshair";
             this.Load += new System.EventHandler(this.Overlay_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Overlay_Paint);
             this.ResumeLayout(false);
