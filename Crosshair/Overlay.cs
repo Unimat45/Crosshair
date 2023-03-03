@@ -1,8 +1,16 @@
 ﻿namespace Pointer {
     using VK = Externs.VK;
+    using TextRenderingHint = System.Drawing.Text.TextRenderingHint;
+    using SmoothingMode = System.Drawing.Drawing2D.SmoothingMode;
+
+    //using SmoothingMode
+
     public partial class Overlay : Form {
         // Refresh rate of the application in miliseconds
         private const int REFRESH_RATE = 50;
+
+        // Labels
+        private bool shouldDrawPos = false;
 
         // Used to draw the lines
         private Graphics? g;
@@ -24,12 +32,11 @@
 
         public Overlay() {
             InitializeComponent();
-            
+
             // Pen initialization
             pen = new(Color.White, .5f);
             penBlack = new(Color.Black, .5f);
 
-            // TODO: Find out why this don't work 😥
             // System Tray icon
             NotifyIcon icon = new() {
                 Text = "Pointer",
@@ -38,7 +45,7 @@
             };
 
             ContextMenuStrip strip = new();
-             
+
             ToolStripMenuItem item = new() {
                 Text = "Exit"
             };
@@ -47,11 +54,16 @@
             strip.Items.Add(item);
             icon.ContextMenuStrip = strip;
 
+            // TODO: Find out why this don't work 😥
+            icon.MouseClick += new MouseEventHandler((object? sender, MouseEventArgs args) => {
+                if (args.Button == MouseButtons.Right) { strip.Show(MousePosition); }
+            });
+
             // Positions window to fit whole screen
             this.PositionWindow();
 
             Config.LoadFromFile(this.Width, this.Height);
-            
+
             // Creates a default configuration with rules to put the crosshair in the middle of the screen
             defaultCfg = new Config(this.Width, this.Height, "None", "%w / 2", "%h / 2");
 
@@ -60,18 +72,18 @@
             // Keyboard shortcut Thread
             new Task(() => {
                 while (true) {
-                    bool isUpOn     =   Externs.IsKeyDown(VK.UP);
-                    bool isPDown    =   Externs.IsKeyDown(VK.KEY_P);
-                    bool isQDown    =   Externs.IsKeyDown(VK.KEY_Q);
-                    bool isDownOn   =   Externs.IsKeyDown(VK.DOWN);
-                    bool isLeftOn   =   Externs.IsKeyDown(VK.LEFT);
-                    bool isRightOn  =   Externs.IsKeyDown(VK.RIGHT);
+                    bool isUpOn = Externs.IsKeyDown(VK.UP);
+                    bool isPDown = Externs.IsKeyDown(VK.KEY_P);
+                    bool isQDown = Externs.IsKeyDown(VK.KEY_Q);
+                    bool isDownOn = Externs.IsKeyDown(VK.DOWN);
+                    bool isLeftOn = Externs.IsKeyDown(VK.LEFT);
+                    bool isRightOn = Externs.IsKeyDown(VK.RIGHT);
 
-                    bool isShiftOn  =   Externs.IsKeyDown(VK.LSHIFT);
-                    bool isCtrlOn   =   Externs.IsKeyDown(VK.CONTROL);
-                    bool isAltOn    =   Externs.IsKeyDown(VK.RMENU);
-                    bool isLeftAltOn=   Externs.IsKeyDown(VK.LMENU);
-                    bool isHomeOn   =   Externs.IsKeyDown(VK.HOME);
+                    bool isShiftOn = Externs.IsKeyDown(VK.LSHIFT);
+                    bool isCtrlOn = Externs.IsKeyDown(VK.CONTROL);
+                    bool isAltOn = Externs.IsKeyDown(VK.RMENU);
+                    bool isLeftAltOn = Externs.IsKeyDown(VK.LMENU);
+                    bool isHomeOn = Externs.IsKeyDown(VK.HOME);
 
                     // Quitting Sequence
                     if (isLeftAltOn && isShiftOn && isCtrlOn && isQDown) {
@@ -83,7 +95,7 @@
                         // Toggling sequence
                         if (isCtrlOn && isPDown) {
                             if (isHidden) {
-                                this.SafeExec(form => Show());
+                                this.SafeExec(form => form.Show());
                             }
                             else {
                                 this.SafeExec(form => form.Hide());
@@ -101,11 +113,13 @@
                         }
 
                         // Moves crosshair
-                        if (isLeftOn)   { offsetX--; }
-                        if (isRightOn)  { offsetX++; }
-                        if (isUpOn)     { offsetY--; }
-                        if (isDownOn)   { offsetY++; }
+                        if (isLeftOn) { offsetX--; }
+                        if (isRightOn) { offsetX++; }
+                        if (isUpOn) { offsetY--; }
+                        if (isDownOn) { offsetY++; }
                     }
+                    
+                    shouldDrawPos = isAltOn;
 
                     // Sleeps with the refresh rate
                     Thread.Sleep(REFRESH_RATE);
@@ -165,7 +179,10 @@
         private void Overlay_Paint(object sender, PaintEventArgs e) {
             // Initializes Graphics
             g = e.Graphics;
-            
+
+            g.TextRenderingHint = TextRenderingHint.SingleBitPerPixelGridFit;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+
             // Gets the loaded config or the default one if no config is loaded
             Config cfg = Config.ActiveConfig ?? defaultCfg;
 
@@ -176,13 +193,18 @@
 
                 g.DrawLine(pen, width - multi, height, width + multi, height);
                 g.DrawLine(pen, width, height - multi, width, height + multi);
+
+                if (shouldDrawPos) {
+                    g.DrawString($"X: {width}", new Font("Arial", 18), Brushes.HotPink, new Point(this.Width - 150, 50));
+                    g.DrawString($"Y: {height}", new Font("Arial", 18), Brushes.HotPink, new Point(this.Width - 150, 100));
+                }
             }
             catch (ConfigParseException err) {
                 // If config parsing error, show message and exits application
                 MessageBox.Show(err.Message, "Error", MessageBoxButtons.OK);
                 this.Close();
             }
-            
+
             // BLACK LINES
             // No need to try here, since it uses the same values as the white lines
             float widthBlack = cfg.CalculateWidth() + 1 + offsetX;      // added a 1px offset
