@@ -81,10 +81,10 @@
         /// </summary>
         /// <returns>The actual X positiom</returns>
         public int CalculateWidth() {
-            if (_widthRule != null) {
+            if (_x <= 0 && _widthRule != null) {
                 return (int)Eval(_widthRule?.Replace("%w", _width.ToString()) ?? "0");
             }
-            return _x;
+            return Math.Max(_x, 0);
         }
 
         /// <summary>
@@ -92,10 +92,10 @@
         /// </summary>
         /// <returns>The actual Y positiom</returns>
         public int CalculateHeight() {
-            if (_heightRule != null) {
+            if (_y <= 0 && _heightRule != null) {
                 return(int)Eval(_heightRule?.Replace("%h", _height.ToString()) ?? "0");
             }
-            return _y;
+            return Math.Max(_y, 0);
         }
 
         /// <summary>
