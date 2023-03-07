@@ -27,8 +27,8 @@
         private float offsetX = 0f;
         private float offsetY = 0f;
 
-        // Width of lines constant
-        private const float multi = 5f;
+        // Width of lines
+        private float multi;
 
         public Overlay() {
             InitializeComponent();
@@ -61,6 +61,9 @@
 
             // Positions window to fit whole screen
             this.PositionWindow();
+
+            // Initializes line multiplier
+            this.multi = this.Height / 288f;
 
             Config.LoadFromFile(this.Width, this.Height);
 
