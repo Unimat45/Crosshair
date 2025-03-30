@@ -49,7 +49,7 @@ int MainWindow::Init()
         return 1;
     }
 
-    this->window = SDL_CreateWindow("Crosshair", 0, 0, screenX, screenY, 0);
+    this->window = SDL_CreateWindow("Crosshair", 0, 0, screenX, screenY, SDL_WINDOW_HIDDEN | SDL_WINDOW_ALWAYS_ON_TOP | SDL_WINDOW_BORDERLESS);
     this->renderer = SDL_CreateRenderer(window, -1, 0);
     this->Arial40 = TTF_OpenFont("C:\\Windows\\Fonts\\arialbd.ttf", 40);
 
@@ -60,19 +60,21 @@ int MainWindow::Init()
 
     setWindowColorKey(window);
 
+    SDL_ShowWindow(this->window);
+
     while (!this->shouldQuit)
     {
-        this->Start();
+        this->Loop();
     }
 
     return 0;
 }
 
-void MainWindow::Start()
+void MainWindow::Loop()
 {
     SDL_Event event;
 
-    SDL_Delay(100);
+    SDL_Delay(2);
     (void)SDL_PollEvent(&event);
 
     switch (event.type)

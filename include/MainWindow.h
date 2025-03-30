@@ -39,7 +39,7 @@ public:
     }
 
     int Init();
-    void Start();
+    void Loop();
     void Draw();
     void Logic();
 };
