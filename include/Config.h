@@ -1,9 +1,9 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include "ProcessConfig.h"
 #include <array>
 #include <thread>
-#include "ProcessConfig.h"
 
 union CrosshairColor
 {
@@ -13,8 +13,7 @@ union CrosshairColor
 
 class CrosshairConfig
 {
-
-private:
+  private:
     std::array<uint8_t, 4> quitKeys;
     std::array<uint8_t, 4> toggleKeys;
     std::array<uint8_t, 4> resetKeys;
@@ -23,24 +22,51 @@ private:
     CrosshairColor textColor;
     std::thread th;
     std::unique_ptr<ProcessConfig> defaultConfig;
-    json processes;
 
     void loadConfig(int w, int h);
-    void saveConfig();
 
-public:
+  public:
     CrosshairConfig(int w, int h);
     ~CrosshairConfig();
 
+    /*
+     * Checks that all quit keys are being pressed down
+     */
     bool isQuitDown();
+
+    /*
+     * Checks that all toogle keys are being pressed down
+     */
     bool isToggleDown();
+
+    /*
+     * Checks that all reset keys are being pressed down
+     */
     bool isResetDown();
+
+    /*
+     * Checks that the super key is being pressed down
+     */
     bool isSuperDown();
 
-    int calcX();
-    int calcY();
+    /*
+     * Gets the x value depending on the loaded config
+     */
+    int getX();
 
+    /*
+     * Gets the y value depending on the loaded config
+     */
+    int getY();
+
+    /*
+     * Gets the crosshair color
+     */
     inline CrosshairColor getCrosshairColor() { return crosshairColor; }
+
+    /*
+     * Gets the text color
+     */
     inline CrosshairColor getTextColor() { return textColor; }
 };
 

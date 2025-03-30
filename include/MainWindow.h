@@ -1,21 +1,20 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "SDL.h"
 #include "Config.h"
+#include "SDL.h"
 #include "SDL_ttf.h"
 #include <memory>
 
 struct WindowSize
 {
     int w, h;
-    int half_x, half_y;
 };
 
 class MainWindow
 {
 
-private:
+  private:
     SDL_Renderer *renderer;
     SDL_Window *window;
     TTF_Font *Arial40;
@@ -27,7 +26,7 @@ private:
     std::unique_ptr<CrosshairConfig> config;
     WindowSize size;
 
-public:
+  public:
     MainWindow() {}
     ~MainWindow()
     {

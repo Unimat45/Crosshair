@@ -6,10 +6,10 @@
 class ConfigException : virtual public std::exception
 {
 
-private:
+  private:
     std::string message;
 
-public:
+  public:
     ConfigException(std::string message) : message(message) {}
     ConfigException(const char *message) : message(message) {}
     ~ConfigException() {}
